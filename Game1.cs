@@ -10,53 +10,57 @@ namespace Parallel
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        SpriteBatch sb;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
         }
-
-        /// <summary>
-        /// Allows the game to perform any initialization it needs to before starting to run.
-        /// This is where it can query for any required services and load any non-graphic
-        /// related content.  Calling base.Initialize will enumerate through any components
-        /// and initialize them as well.
-        /// </summary>
+       
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            graphics.PreferredBackBufferWidth = 800;
+            graphics.PreferredBackBufferHeight = 600;
+            graphics.ApplyChanges();
+
+            // Creates blank world
+            for (int x = 0; x < Parallel.levelSize.X; x++) {
+                Parallel.levelData[x] = new Parallel.BlockType[30];
+                for (int y = 0; y < Parallel.levelSize.Y; y++) {
+                    Parallel.levelData[x][y] = 0;
+                }
+            }
+            // Creates walls around world
+            for (int x = 0; x < Parallel.levelSize.X; x++)
+            {
+                Parallel.levelData[x][0] = Parallel.BlockType.Block;
+                Parallel.levelData[x][Parallel.levelSize.Y - 1] = Parallel.BlockType.Block;
+            }
+            for (int y = 0; y < Parallel.levelSize.Y; y++)
+            {
+                Parallel.levelData[0][y] = Parallel.BlockType.Block;
+                Parallel.levelData[Parallel.levelSize.X - 1][y] = Parallel.BlockType.Block;
+            }
+
 
             base.Initialize();
         }
 
-        /// <summary>
-        /// LoadContent will be called once per game and is the place to load
-        /// all of your content.
-        /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            sb = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            Parallel.Sprites.Add("background", Content.Load<Texture2D>("background"));
+            Parallel.Sprites.Add("block", Content.Load<Texture2D>("block"));
         }
 
-        /// <summary>
-        /// UnloadContent will be called once per game and is the place to unload
-        /// game-specific content.
-        /// </summary>
         protected override void UnloadContent()
         {
             // TODO: Unload any non ContentManager content here
         }
 
-        /// <summary>
-        /// Allows the game to run logic such as updating the world,
-        /// checking for collisions, gathering input, and playing audio.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -67,16 +71,27 @@ namespace Parallel
             base.Update(gameTime);
         }
 
-        /// <summary>
-        /// This is called when the game should draw itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+            sb.Begin();
 
-            // TODO: Add your drawing code here
+            sb.Draw(Parallel.Sprites["background"], new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
+            for (int x = 0; x < Parallel.levelSize.X; x++) {
+                for (int y = 0; y < Parallel.levelSize.Y; y++) {
+                    switch (Parallel.levelData[x][y]) {
+                        case Parallel.BlockType.None:
+                            break;
+                        case Parallel.BlockType.Block:
+                            Rectangle pos = new Rectangle(x * 20, y * 20, 20, 20);
+                            sb.Draw(Parallel.Sprites["block"], pos, Color.White);
+                            break;
+                    }
+                }
+            }
 
+
+            sb.End();
             base.Draw(gameTime);
         }
     }
