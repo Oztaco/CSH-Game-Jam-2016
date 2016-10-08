@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Parallel
 {
-    class Destroyer
+    public class Destroyer
     {
         
     }
