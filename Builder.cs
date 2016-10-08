@@ -42,9 +42,9 @@ namespace Parallel
                         nextBlock = Parallel.levelData[(int)_position.X - 1][(int)_position.Y];
                         break;
                 }
-                if (nextBlock == Parallel.BlockType.None)
-                    movement = MovementType.Flying;
-                else
+                //if (nextBlock == Parallel.BlockType.None)
+                //    movement = MovementType.Flying;
+                //else
             }
         }
         public void tryStop() {
