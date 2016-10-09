@@ -78,27 +78,49 @@ namespace Parallel
                 _velocity = new Vector2(0);
                 if (movement == MovementType.Flying) {
                     Parallel.BlockType currentBlock = Parallel.levelData[(int)_position.X][(int)_position.Y];
-                    if (currentBlock == Parallel.BlockType.None) {
+                    if (currentBlock == Parallel.BlockType.None || currentBlock == Parallel.BlockType.FloatBlock) {
                         movement = MovementType.Still;
                         move(nextDirection);
                     }
-                    else
+                    else {
                         movement = MovementType.Still;
+                        finishFlyingPath();
+                    }
                 }
-                else
+                else {
                     movement = MovementType.Still;
+                    finishFlyingPath();
+                }
                 return true;
             }
             return false;
         }
         public void flyingMove(Direction d) {
             if (movement == MovementType.Flying && _direction == nextDirection) {
-                nextDirection = d;
+                if (!Parallel.isOppositeDirection(_direction, d))
+                    nextDirection = d;
             }
         }
         public void update(GameTime t) {
             if (movement != MovementType.Still)
                 _position += _velocity * t.ElapsedGameTime.Milliseconds / 10f;
+            Parallel.BlockType current = getCurrentBlock();
+            if (current == Parallel.BlockType.None) {
+                Parallel.setBlock(_position.X, _position.Y, Parallel.BlockType.FloatBlock);
+            }
+        }
+        public Parallel.BlockType getCurrentBlock() {
+            int x = (int)Math.Round(_position.X);
+            int y = (int)Math.Round(_position.Y);
+            return Parallel.levelData[x][y];
+        }
+        public void finishFlyingPath() {
+            for (int x = 0; x < Parallel.levelData.Length; x++) {
+                for (int y = 0; y < Parallel.levelData[x].Length; y++) {
+                    if (Parallel.levelData[x][y] == Parallel.BlockType.FloatBlock)
+                        Parallel.levelData[x][y] = Parallel.BlockType.Block;
+                } 
+            }
         }
 
 

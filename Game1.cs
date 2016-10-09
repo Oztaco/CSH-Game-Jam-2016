@@ -43,6 +43,9 @@ namespace Parallel {
                 Parallel.levelData[Parallel.levelSize.X - 1][y] = Parallel.BlockType.Block;
             }
 
+            // Create entities
+            Parallel.entities.Add(new Enemy());
+
 
             base.Initialize();
         }
@@ -54,6 +57,11 @@ namespace Parallel {
             Parallel.Sprites.Add("background", Content.Load<Texture2D>("background"));
             Parallel.Sprites.Add("block", Content.Load<Texture2D>("block"));
             Parallel.Sprites.Add("builder", Content.Load<Texture2D>("builder"));
+            Parallel.Sprites.Add("floatblock", Content.Load<Texture2D>("floatblock"));
+            Parallel.Sprites.Add("destroyer0", Content.Load<Texture2D>("destroyer0"));
+            Parallel.Sprites.Add("destroyer1", Content.Load<Texture2D>("destroyer1"));
+            Parallel.Sprites.Add("destroyer2", Content.Load<Texture2D>("destroyer2"));
+            Parallel.Sprites.Add("enemy", Content.Load<Texture2D>("enemy"));
             //Parallel.Sprites.Add("builder", Content.Load<Texture2D>("builder"));
         }
 
@@ -81,6 +89,7 @@ namespace Parallel {
                     builder.move(keyDirection);
                 }
             }
+            Parallel.updateEntities(gameTime);
             builder.update(gameTime);
             System.Console.WriteLine(builderLastKeyPress);
 
@@ -96,17 +105,23 @@ namespace Parallel {
             sb.Draw(Parallel.Sprites["background"], new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
             for (int x = 0; x < Parallel.levelSize.X; x++) {
                 for (int y = 0; y < Parallel.levelSize.Y; y++) {
+                    Rectangle pos;
                     switch (Parallel.levelData[x][y]) {
                         case Parallel.BlockType.None:
                             break;
                         case Parallel.BlockType.Block:
-                            Rectangle pos = new Rectangle(x * 20, y * 20, 20, 20);
+                            pos = new Rectangle(x * 20, y * 20, 20, 20);
                             sb.Draw(Parallel.Sprites["block"], pos, Color.White);
+                            break;
+                        case Parallel.BlockType.FloatBlock:
+                            pos = new Rectangle(x * 20, y * 20, 20, 20);
+                            sb.Draw(Parallel.Sprites["floatblock"], pos, Color.White);
                             break;
                     }
                 }
             }
-            sb.Draw(Parallel.Sprites["builder"], new Rectangle(new Point((int)builder.position.X * 20, (int)builder.position.Y * 20), builder.size), Color.White);
+            Parallel.drawEntities(gameTime, sb);
+            sb.Draw(Parallel.Sprites["builder"], new Rectangle(new Point((int)(builder.position.X * 20), (int)(builder.position.Y * 20)), builder.size), Color.White);
 
             sb.End();
             base.Draw(gameTime);
