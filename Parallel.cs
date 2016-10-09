@@ -15,7 +15,7 @@ namespace Parallel
         public static BlockType[][] levelData = new BlockType[40][];
         public static Point levelSize = new Point(40, 30);
         public enum BlockType {
-            None, Block, FloatBlock
+            Void, None, Block, FloatBlock
         }
     }
 }
