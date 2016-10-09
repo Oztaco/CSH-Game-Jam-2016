@@ -115,16 +115,33 @@ namespace Parallel
             return Parallel.levelData[x][y];
         }
         public void finishFlyingPath() {
+			Parallel.BlockType b;
             for (int x = 0; x < Parallel.levelData.Length; x++) {
                 for (int y = 0; y < Parallel.levelData[x].Length; y++) {
-                    if (Parallel.levelData[x][y] == Parallel.BlockType.FloatBlock)
+					b = Parallel.levelData[x][y];
+					if (b == Parallel.BlockType.FloatBlock || b == Parallel.BlockType.RedFloatBlock || b == Parallel.BlockType.NewRedBlock)
                         Parallel.levelData[x][y] = Parallel.BlockType.Block;
                 } 
             }
+			fillInFlyingPath();
         }
+		public void fillInFlyingPath() {
+			
+		}
 
 
-        public enum MovementType {
+		public bool checkCollision() {
+			foreach (Entity e in Parallel.entities) {
+				float dx = Math.Abs(e.position.X - _position.X);
+				float dy = Math.Abs(e.position.Y - _position.Y);
+				double mag = Math.Sqrt(Math.Pow(dx, 2) + Math.Pow(dy, 2));
+				if (mag <= 1.0)
+					return true;
+			}
+			return false;
+		}
+
+		public enum MovementType {
             Still, Walking, Flying
         }
     }

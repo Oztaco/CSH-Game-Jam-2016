@@ -10,4 +10,7 @@ namespace Parallel
     {
         Up, Right, Down, Left
     };
+	public enum GameState {
+		Playing, Win, Lose
+	}
 }
