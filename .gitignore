@@ -1,2 +1,6 @@
 .vs/
-bin
+bin/
+obj/
+*.exe
+*.cache
+*.pdb
