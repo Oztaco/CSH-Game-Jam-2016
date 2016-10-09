@@ -18,26 +18,24 @@ namespace Parallel
                 return _pos;
             }
         }
+        public MovementType movement = MovementType.Still;
         public void move(Direction d) {
-            //Basic velocity movemetn setup.
-            switch (d)
-            {
-                case Direction.Up:
-                    _velocity = new Vector2(0, -0.1f);
-                    break;
+            //TODO: WRITE CODE FOR DESTROYER MOVEMENT AFTER BUILDER IS COMPLETED
+            if (movement == MovementType.Still) {
+                switch (d)
+                {
+                    case Direction.Up:
+                        break;
 
-                case Direction.Right:
-                    _velocity = new Vector2(0.1f, 0);
-                    break;
+                    case Direction.Right:
+                        break;
 
-                case Direction.Down:
-                    _velocity = new Vector2(0, 0.1f);
-                    break;
+                    case Direction.Down:
+                        break;
 
-                case Direction.Left:
-                    _velocity = new Vector2(-0.1f, 0);
-                    break;
-
+                    case Direction.Left:
+                        break;
+                }
             }
         }
         public void tryStop(){
@@ -45,9 +43,7 @@ namespace Parallel
         }
 
         public enum MovementType{
-            //TODO: HOW DO WE WANT THE SHIP TO MOVE? PURE SLIPPERY ASTROIDS STYLE MOVEMENT MIGHT BE 
-            //TOO HARD FOR THIS TYPE OF GAME
-            accelerate, decelerate
+            Forward, Reverse, Still
         }
     }
 }
